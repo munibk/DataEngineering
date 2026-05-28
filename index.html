@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Engineer · Study Library</title>
+<style>
+  :root {
+    --bg-0: #0b1020;
+    --bg-1: #0f1530;
+    --bg-2: #151c3d;
+    --panel: rgba(255, 255, 255, 0.04);
+    --panel-strong: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #e8ecff;
+    --text-dim: #a3acd1;
+    --text-mute: #7a83a8;
+    --accent: #7aa2ff;
+    --accent-2: #b794ff;
+    --accent-3: #5ee0c1;
+    --danger: #ff7a90;
+    --warn: #ffc36a;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --radius: 14px;
+  }
+  [data-theme="light"] {
+    --bg-0: #f4f6fc;
+    --bg-1: #ffffff;
+    --bg-2: #eef1fa;
+    --panel: rgba(15, 20, 50, 0.04);
+    --panel-strong: rgba(15, 20, 50, 0.07);
+    --border: rgba(15, 20, 50, 0.10);
+    --text: #1a2040;
+    --text-dim: #4a5378;
+    --text-mute: #7a83a8;
+    --accent: #3b6bff;
+    --accent-2: #8a4dff;
+    --accent-3: #14a37f;
+    --shadow: 0 10px 30px rgba(20, 30, 80, 0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(122, 162, 255, 0.18), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, rgba(183, 148, 255, 0.16), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(94, 224, 193, 0.12), transparent 60%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 28px 80px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow);
+    font-weight: 800;
+    color: white;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .brand p {
+    margin: 2px 0 0 0;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .actions {
+    display: flex; gap: 10px; align-items: center;
+  }
+  .btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s ease;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { background: var(--panel-strong); transform: translateY(-1px); }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none; color: white; font-weight: 600;
+  }
+
+  /* Stats */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    backdrop-filter: blur(6px);
+  }
+  .stat .label {
+    color: var(--text-mute);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .stat .value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .search {
+    flex: 1 1 320px;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px 12px 42px;
+    font-size: 14px;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .search input::placeholder { color: var(--text-mute); }
+  .search input:focus { border-color: var(--accent); background: var(--panel-strong); }
+  .search svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-mute);
+  }
+
+  .sort {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  /* Filter chips */
+  .chips {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .chip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .15s ease;
+    user-select: none;
+  }
+  .chip:hover { color: var(--text); background: var(--panel-strong); }
+  .chip.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    border-color: transparent;
+  }
+  .chip .count {
+    margin-left: 6px;
+    font-size: 11px;
+    opacity: 0.75;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section h2 {
+    font-size: 15px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section h2 .bar {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  /* Card */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, var(--accent) 200%);
+    opacity: 0;
+    transition: opacity .2s ease;
+    pointer-events: none;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    background: var(--panel-strong);
+    box-shadow: var(--shadow);
+  }
+  .card:hover::before { opacity: 0.12; }
+  .card .icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: white;
+  }
+  .icon.pdf  { background: linear-gradient(135deg, #ff5a7a, #ff8a5a); }
+  .icon.py   { background: linear-gradient(135deg, #3b6bff, #5ee0c1); }
+  .icon.json { background: linear-gradient(135deg, #ffb547, #ff7a3a); }
+  .icon.txt  { background: linear-gradient(135deg, #7a83a8, #a3acd1); }
+  .icon.url  { background: linear-gradient(135deg, #5ee0c1, #3b6bff); }
+  .icon.other { background: linear-gradient(135deg, #b794ff, #7aa2ff); }
+
+  .card .meta {
+    min-width: 0; flex: 1;
+  }
+  .card .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+  }
+  .card .sub {
+    color: var(--text-mute);
+    font-size: 12px;
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .card .sub .dot {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--text-mute);
+  }
+  .card .folder-tag {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-mute);
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-mute);
+    font-size: 12px;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* Tooltip-ish info note */
+  .note {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .note svg { flex-shrink: 0; color: var(--accent); margin-top: 2px; }
+  .note code {
+    background: var(--panel-strong);
+    padding: 1px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 18px; }
+    .brand h1 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <div class="logo">DE</div>
+        <div>
+          <h1>Data Engineer · Study Library</h1>
+          <p>One place to access every PDF, script, and note in your collection</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="themeBtn" title="Toggle theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <span id="themeLabel">Light mode</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat"><div class="label">Total Files</div><div class="value" id="statFiles">—</div></div>
+      <div class="stat"><div class="label">Total Size</div><div class="value" id="statSize">—</div></div>
+      <div class="stat"><div class="label">Categories</div><div class="value" id="statCats">—</div></div>
+      <div class="stat"><div class="label">PDFs</div><div class="value" id="statPdf">—</div></div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <div>
+        Place this <code>index.html</code> at the root of <code>Data_Engineer/</code> and just double-click it. Each card opens the file in a new tab using your default app. Use the search bar or category chips to filter.
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="searchInput" type="text" placeholder="Search files by name, folder, or extension…" />
+      </div>
+      <select id="sortSelect" class="sort">
+        <option value="folder">Sort: Folder</option>
+        <option value="name">Sort: Name (A–Z)</option>
+        <option value="name-desc">Sort: Name (Z–A)</option>
+        <option value="size-desc">Sort: Size (large ? small)</option>
+        <option value="size">Sort: Size (small ? large)</option>
+      </select>
+    </div>
+
+    <!-- Chips -->
+    <div class="chips" id="chips"></div>
+
+    <!-- Results -->
+    <div id="results"></div>
+
+    <footer>
+      Generated index for your local study library · works offline · no tracking
+    </footer>
+  </div>
+
+<script>
+  // ---------- File registry ----------
+  // path: relative to this index.html
+  // category: top-level folder used for grouping
+  // ext: file extension (lowercased, no dot)
+  // size: in bytes
+  const FILES = [
+    // Interview
+    { category: "Interview",      path: "Interview/INTERVIEW_QUESTIONS.pdf",                                  size: 474872 },
+    { category: "Interview",      path: "Interview/INTERVIEW_QUESTIONS_1.pdf",                                size: 598093 },
+    { category: "Interview",      path: "Interview/Top 52 Azure Data Engineering Questions & Answers guide.pdf", size: 429488 },
+
+    // others
+    { category: "Others",         path: "others/DC.pdf",   size: 570773 },
+    { category: "Others",         path: "others/DC_1.pdf", size: 924984 },
+    { category: "Others",         path: "others/DET.pdf",  size: 3799381 },
+    { category: "Others",         path: "others/DM.pdf",   size: 332565 },
+    { category: "Others",         path: "others/DM_1.pdf", size: 2684106 },
+
+    // Project
+    { category: "Project",        path: "Project/1742186639894.pdf", size: 2792 },
+
+    // Python
+    { category: "Python",         path: "Python/1703635703555.pdf",      size: 4646138 },
+    { category: "Python",         path: "Python/1743143545317.pdf",      size: 5915298 },
+    { category: "Python",         path: "Python/interview_practice.py",  size: 1192 },
+    { category: "Python",         path: "Python/test.json",              size: 7750 },
+
+    // Spark
+    { category: "Spark",          path: "Spark/1744697184048.pdf",        size: 195959 },
+    { category: "Spark",          path: "Spark/1744854540663.pdf",        size: 752580 },
+    { category: "Spark",          path: "Spark/Apachesparkbeg.pdf",       size: 2212586 },
+    { category: "Spark",          path: "Spark/DAG.pdf",                  size: 740762 },
+    { category: "Spark",          path: "Spark/Data Engineer .pdf",       size: 276899 },
+    { category: "Spark",          path: "Spark/interview_question.pdf",   size: 722993 },
+    { category: "Spark",          path: "Spark/interview_question_1.pdf", size: 506317 },
+    { category: "Spark",          path: "Spark/interview_question_2.pdf", size: 13182627 },
+    { category: "Spark",          path: "Spark/INTRO.pdf",                size: 4018905 },
+    { category: "Spark",          path: "Spark/L1.pdf",                   size: 412344 },
+    { category: "Spark",          path: "Spark/pyspark122page.pdf",       size: 13882262 },
+    { category: "Spark",          path: "Spark/pysparkfunctions.pdf",     size: 66851 },
+    { category: "Spark",          path: "Spark/pysparktrciks.pdf",        size: 292511 },
+    { category: "Spark",          path: "Spark/pyspark_1.pdf",            size: 445937 },
+    { category: "Spark",          path: "Spark/Senario_based.pdf",        size: 276899 },
+    { category: "Spark",          path: "Spark/Senario_based_tcs.pdf",    size: 1785805 },
+    { category: "Spark",          path: "Spark/SQLVSSPARK.pdf",           size: 133192 },
+    { category: "Spark",          path: "Spark/SQLVSSPARK_1.pdf",         size: 117015 },
+
+    // SQL
+    { category: "SQL",            path: "sql/CTE_VS_Sub_query.pdf",       size: 5874525 },
+    { category: "SQL",            path: "sql/INTERVIEW_QUESTIONS.pdf",    size: 460634 },
+    { category: "SQL",            path: "sql/INTRO_1.pdf",                size: 4091131 },
+    { category: "SQL",            path: "sql/INTRO_2.pdf",                size: 1222657 },
+    { category: "SQL",            path: "sql/INTRO_3.pdf",                size: 931143 },
+    { category: "SQL",            path: "sql/INTRO_4.pdf",                size: 6864913 },
+    { category: "SQL",            path: "sql/QUESTIONS.pdf",              size: 358331 },
+    { category: "SQL",            path: "sql/QUESTIONS_1.pdf",            size: 13226885 },
+    { category: "SQL",            path: "sql/sql_optimization.pdf",       size: 929085 },
+    { category: "SQL",            path: "sql/SSP.pdf",                    size: 250325 },
+    { category: "SQL",            path: "sql/WFSQL.pdf",                  size: 15020104 },
+
+    // Text
+    { category: "Text Notes",     path: "Text/BD_TEXT.pdf",  size: 16910796 },
+    { category: "Text Notes",     path: "Text/DE_TEXT.pdf",  size: 3040010 },
+    { category: "Text Notes",     path: "Text/ETL_TEXT.pdf", size: 1026901 },
+
+    // Tools/ADB (Azure Databricks)
+    { category: "Tools · ADB",    path: "Tools/ADB/ADB_1.pdf",             size: 206320 },
+    { category: "Tools · ADB",    path: "Tools/ADB/ADB_2.pdf",             size: 13105963 },
+    { category: "Tools · ADB",    path: "Tools/ADB/Exam.pdf",              size: 202505 },
+    { category: "Tools · ADB",    path: "Tools/ADB/interviewquestions.pdf",size: 2284905 },
+
+    // Tools/ADF (Azure Data Factory)
+    { category: "Tools · ADF",    path: "Tools/ADF/1.pdf",   size: 3269469 },
+    { category: "Tools · ADF",    path: "Tools/ADF/2.pdf",   size: 3133596 },
+    { category: "Tools · ADF",    path: "Tools/ADF/ADF.txt", size: 52 },
+  ];
+
+  // ---------- Friendly display names ----------
+  const FRIENDLY_NAMES = {
+    "Interview/INTERVIEW_QUESTIONS.pdf":   "Data Engineering — Interview Questions",
+    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Data Engineering — Interview Questions (Set 2)",
+    "Interview/Top 52 Azure Data Engineering Questions & Answers guide.pdf":
+                                           "Top 52 Azure Data Engineering Q&A Guide",
+    "others/DC.pdf":  "Data Concepts — Notes",
+    "others/DC_1.pdf":"Data Concepts — Notes (Set 2)",
+    "others/DET.pdf": "Data Engineering Toolkit / DET",
+    "others/DM.pdf":  "Data Modeling — Notes",
+    "others/DM_1.pdf":"Data Modeling — Notes (Set 2)",
+    "Project/1742186639894.pdf": "Project Reference Doc",
+    "Python/1703635703555.pdf":  "Python — Reference PDF (1)",
+    "Python/1743143545317.pdf":  "Python — Reference PDF (2)",
+    "Python/interview_practice.py": "Python — interview_practice.py",
+    "Python/test.json":             "Python — test.json (sample data)",
+    "Spark/1744697184048.pdf": "Spark — Reference PDF (A)",
+    "Spark/1744854540663.pdf": "Spark — Reference PDF (B)",
+    "Spark/Apachesparkbeg.pdf": "Apache Spark — Beginner Guide",
+    "Spark/DAG.pdf": "Spark — DAG (Execution Plan)",
+    "Spark/Data Engineer .pdf": "Spark — Data Engineer Notes",
+    "Spark/interview_question.pdf":   "Spark — Interview Questions",
+    "Spark/interview_question_1.pdf": "Spark — Interview Questions (Set 2)",
+    "Spark/interview_question_2.pdf": "Spark — Interview Questions (Set 3)",
+    "Spark/INTRO.pdf": "Spark — Introduction",
+    "Spark/L1.pdf":    "Spark — Lesson 1",
+    "Spark/pyspark122page.pdf":   "PySpark — 122-page Guide",
+    "Spark/pysparkfunctions.pdf": "PySpark — Functions Reference",
+    "Spark/pysparktrciks.pdf":    "PySpark — Tricks & Tips",
+    "Spark/pyspark_1.pdf":        "PySpark — Notes (1)",
+    "Spark/Senario_based.pdf":    "Spark — Scenario-Based Questions",
+    "Spark/Senario_based_tcs.pdf":"Spark — Scenario Questions (TCS)",
+    "Spark/SQLVSSPARK.pdf":       "SQL vs Spark — Comparison",
+    "Spark/SQLVSSPARK_1.pdf":     "SQL vs Spark — Comparison (Set 2)",
+    "sql/CTE_VS_Sub_query.pdf":    "SQL — CTE vs Subquery",
+    "sql/INTERVIEW_QUESTIONS.pdf": "SQL — Interview Questions",
+    "sql/INTRO_1.pdf":             "SQL — Introduction (1)",
+    "sql/INTRO_2.pdf":             "SQL — Introduction (2)",
+    "sql/INTRO_3.pdf":             "SQL — Introduction (3)",
+    "sql/INTRO_4.pdf":             "SQL — Introduction (4)",
+    "sql/QUESTIONS.pdf":           "SQL — Practice Questions",
+    "sql/QUESTIONS_1.pdf":         "SQL — Practice Questions (Set 2)",
+    "sql/sql_optimization.pdf":    "SQL — Optimization",
+    "sql/SSP.pdf":                 "SQL — Stored Procedures (SSP)",
+    "sql/WFSQL.pdf":               "SQL — Window Functions",
+    "Text/BD_TEXT.pdf":  "Big Data — Text Notes",
+    "Text/DE_TEXT.pdf":  "Data Engineering — Text Notes",
+    "Text/ETL_TEXT.pdf": "ETL — Text Notes",
+    "Tools/ADB/ADB_1.pdf":             "Azure Databricks — Notes (1)",
+    "Tools/ADB/ADB_2.pdf":             "Azure Databricks — Notes (2)",
+    "Tools/ADB/Exam.pdf":              "Azure Databricks — Exam Prep",
+    "Tools/ADB/interviewquestions.pdf":"Azure Databricks — Interview Questions",
+    "Tools/ADF/1.pdf":   "Azure Data Factory — Notes (1)",
+    "Tools/ADF/2.pdf":   "Azure Data Factory — Notes (2)",
+    "Tools/ADF/ADF.txt": "ADF — Reference Link",
+  };
+
+  // ---------- Helpers ----------
+  function getExt(path) {
+    const m = path.toLowerCase().match(/\.([a-z0-9]+)$/);
+    return m ? m[1] : "";
+  }
+  function fileName(path) {
+    const i = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
+    return i >= 0 ? path.slice(i + 1) : path;
+  }
+  function formatBytes(b) {
+    if (b < 1024) return b + " B";
+    const k = 1024, units = ["KB", "MB", "GB"];
+    let i = -1, n = b;
+    do { n /= k; i++; } while (n >= k && i < units.length - 1);
+    return n.toFixed(n < 10 ? 2 : 1) + " " + units[i];
+  }
+  function iconClass(ext) {
+    if (ext === "pdf") return "pdf";
+    if (ext === "py")  return "py";
+    if (ext === "json")return "json";
+    if (ext === "txt") return "txt";
+    return "other";
+  }
+  function safeUrl(path) {
+    return path.split("/").map(encodeURIComponent).join("/");
+  }
+
+  // ---------- State ----------
+  let activeCategory = "All";
+  let searchTerm = "";
+  let sortBy = "folder";
+
+  // Decorate files with ext & display name
+  FILES.forEach(f => {
+    f.ext = getExt(f.path);
+    f.name = fileName(f.path);
+    f.display = FRIENDLY_NAMES[f.path] || f.name;
+  });
+
+  // ---------- Render ----------
+  const categories = Array.from(new Set(FILES.map(f => f.category)));
+  const categoryOrder = ["Interview", "SQL", "Spark", "Python",
+                         "Tools · ADB", "Tools · ADF", "Text Notes",
+                         "Others", "Project"];
+  categories.sort((a, b) => {
+    const ai = categoryOrder.indexOf(a); const bi = categoryOrder.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  function renderStats() {
+    const totalSize = FILES.reduce((s, f) => s + f.size, 0);
+    const pdfs = FILES.filter(f => f.ext === "pdf").length;
+    document.getElementById("statFiles").textContent = FILES.length;
+    document.getElementById("statSize").textContent  = formatBytes(totalSize);
+    document.getElementById("statCats").textContent  = categories.length;
+    document.getElementById("statPdf").textContent   = pdfs;
+  }
+
+  function renderChips() {
+    const chipsEl = document.getElementById("chips");
+    const allCount = FILES.length;
+    chipsEl.innerHTML = "";
+
+    const makeChip = (label, count, key) => {
+      const el = document.createElement("div");
+      el.className = "chip" + (activeCategory === key ? " active" : "");
+      el.innerHTML = label + ' <span class="count">' + count + '</span>';
+      el.addEventListener("click", () => {
+        activeCategory = key;
+        renderChips();
+        renderResults();
+      });
+      chipsEl.appendChild(el);
+    };
+
+    makeChip("All", allCount, "All");
+    categories.forEach(c => {
+      const n = FILES.filter(f => f.category === c).length;
+      makeChip(c, n, c);
+    });
+  }
+
+  function getFiltered() {
+    const t = searchTerm.trim().toLowerCase();
+    let list = FILES.filter(f => {
+      if (activeCategory !== "All" && f.category !== activeCategory) return false;
+      if (!t) return true;
+      return (
+        f.name.toLowerCase().includes(t) ||
+        f.display.toLowerCase().includes(t) ||
+        f.category.toLowerCase().includes(t) ||
+        f.path.toLowerCase().includes(t) ||
+        f.ext.includes(t)
+      );
+    });
+
+    switch (sortBy) {
+      case "name":      list.sort((a,b) => a.display.localeCompare(b.display)); break;
+      case "name-desc": list.sort((a,b) => b.display.localeCompare(a.display)); break;
+      case "size":      list.sort((a,b) => a.size - b.size); break;
+      case "size-desc": list.sort((a,b) => b.size - a.size); break;
+      case "folder":
+      default:
+        list.sort((a,b) => {
+          const ai = categoryOrder.indexOf(a.category);
+          const bi = categoryOrder.indexOf(b.category);
+          const aw = ai === -1 ? 999 : ai;
+          const bw = bi === -1 ? 999 : bi;
+          if (aw !== bw) return aw - bw;
+          return a.display.localeCompare(b.display);
+        });
+    }
+    return list;
+  }
+
+  function cardHTML(f) {
+    const ic = iconClass(f.ext);
+    const url = safeUrl(f.path);
+    const label = (f.ext || "file").toUpperCase();
+    return `
+      <a class="card" href="${url}" target="_blank" rel="noopener">
+        <div class="icon ${ic}">${label}</div>
+        <div class="meta">
+          <div class="name">${f.display}</div>
+          <div class="sub">
+            <span class="folder-tag">${f.category}</span>
+            <span class="dot"></span>
+            <span>${formatBytes(f.size)}</span>
+            <span class="dot"></span>
+            <span>${f.name}</span>
+          </div>
+        </div>
+      </a>`;
+  }
+
+  function renderResults() {
+    const list = getFiltered();
+    const wrap = document.getElementById("results");
+    if (list.length === 0) {
+      wrap.innerHTML = '<div class="empty">No files match your search.</div>';
+      return;
+    }
+
+    if (sortBy === "folder" && activeCategory === "All" && !searchTerm.trim()) {
+      const byCat = {};
+      list.forEach(f => { (byCat[f.category] = byCat[f.category] || []).push(f); });
+      wrap.innerHTML = Object.keys(byCat).map(cat => `
+        <div class="section">
+          <h2>${cat} <span class="count">(${byCat[cat].length})</span><span class="bar"></span></h2>
+          <div class="grid">
+            ${byCat[cat].map(cardHTML).join("")}
+          </div>
+        </div>
+      `).join("");
+    } else {
+      wrap.innerHTML = `<div class="grid">${list.map(cardHTML).join("")}</div>`;
+    }
+  }
+
+  // ---------- Events ----------
+  document.getElementById("searchInput").addEventListener("input", e => {
+    searchTerm = e.target.value;
+    renderResults();
+  });
+  document.getElementById("sortSelect").addEventListener("change", e => {
+    sortBy = e.target.value;
+    renderResults();
+  });
+
+  const themeBtn = document.getElementById("themeBtn");
+  const themeLabel = document.getElementById("themeLabel");
+  const savedTheme = localStorage.getItem("de-library-theme");
+  if (savedTheme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+    themeLabel.textContent = "Dark mode";
+  }
+  themeBtn.addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    if (cur === "light") {
+      document.documentElement.removeAttribute("data-theme");
+      themeLabel.textContent = "Light mode";
+      localStorage.setItem("de-library-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+      themeLabel.textContent = "Dark mode";
+      localStorage.setItem("de-library-theme", "light");
+    }
+  });
+
+  // ---------- Initial render ----------
+  renderStats();
+  renderChips();
+  renderResults();
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+{
+    "1":{   "interfaceDB.config.acl:ACL_TABLE|ACL-systemStartupIpv4": {
+            "action":"set",
+             "type": "hash",
+            "value": {
+                    "type": "L3",
+                    "policy_desc": "ACL-systemStartupIpv4, Ethernet",
+                    "stage": "ingress",
+                    "ports@": "Ethernet$neoam_port"
+            }
+    }
+    },
+    "2":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ne3sSrcPort1|MATCHES-1|L3IPV4-1": {
+            "action":"set",
+            "type": "hash",
+            "value": {
+                    "protocol": "6"
+            }
+    }
+    },
+    "4":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ne3sSrcPort2|MATCHES-1|L3IPV4-1": {
+            "action":"set",
+            "type": "hash",
+            "value": {
+                    "protocol": "6"
+            }
+    }
+    },
+    "5":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ne3sSrcPort2|MATCHES-1|L2-1": {
+            "action":"set",
+            "type": "hash",
+            "value": {
+                    "destinationMacAddress": "$dst_mac",
+                    "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+            }
+    }
+    },
+    "6":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort1|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                    "protocol": "6"
+             }
+    }
+    },
+    "7":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort1|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "8":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort2|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "9":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort2|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "10":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort3|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "12":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort4|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "13":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort4|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "14":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort5|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "15":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort5|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "16":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort6|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "17":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort6|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "18":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort7|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "19":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort7|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "21":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort8|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "22":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort9|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "23":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-TcpMultiSrcPort9|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                    "destinationMacAddress": "$dst_mac",
+                    "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "24":{   "interfaceDB.config.acl:ACL_RULE|ACL-systemStartupIpv4|ACE-ssh": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "PRIORITY": "100",
+                     "PACKET_ACTION": "FORWARD",
+                     "IP_PROTOCOL": "6",
+                     "L4_DST_PORT": "22",
+                     "DST_MAC": "$dst_mac/FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "25":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ssh|MATCHES-1|L3IPV4-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "protocol": "6"
+             }
+    }
+    },
+    "26":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ssh|MATCHES-1|L4TCP-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationPort": "22"
+             }
+    }
+    },
+    "27":{   "interfaceDB.config.acl:ACL-systemStartupIpv4|ACE-ssh|MATCHES-1|L2-1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "destinationMacAddress": "$dst_mac",
+                     "destinationMacAddressMask": "FF:FF:FF:FF:FF:FF"
+             }
+    }
+    },
+    "28":{   "interfaceDB.config.acl:ACL_RULE|ACL-systemStartupIpv4|ACE-ne3s1": {
+             "action":"set",
+             "type": "hash",
+             "value": {
+                     "PRIORITY": "96",
+                     "PACKET_ACTION": "FORWARD",
+                     "IP_PROTOCOL": "6",
+                     "L4_DST_PORT": "8443",
+                     "DST_MAC": "$dst_mac/FF:FF:FF:FF:FF:FF"
+             }
+    }
+    }
+}
