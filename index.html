@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Data Engineer · Study Library</title>
+<title>Data Engineer  -  Study Library</title>
 <style>
   :root {
     --bg-0: #0b1020;
@@ -369,6 +369,39 @@
     color: var(--text-mute);
   }
 
+  /* Topic + flag badges */
+  .card .tags-row {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .topic-tag {
+    background: rgba(94, 224, 193, 0.12);
+    color: var(--accent-3);
+    border: 1px solid rgba(94, 224, 193, 0.30);
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .flag-badge {
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .flag-misfiled    { background: rgba(255, 122, 144, 0.15); color: var(--danger);    border-color: rgba(255, 122, 144, 0.35); }
+  .flag-misnamed    { background: rgba(255, 195, 106, 0.15); color: var(--warn);      border-color: rgba(255, 195, 106, 0.35); }
+  .flag-duplicate   { background: rgba(183, 148, 255, 0.15); color: var(--accent-2);  border-color: rgba(183, 148, 255, 0.35); }
+  .flag-image-only  { background: var(--panel-strong);        color: var(--text-mute); border-color: var(--border); }
+  .flag-narrow      { background: rgba(122, 162, 255, 0.15); color: var(--accent);    border-color: rgba(122, 162, 255, 0.35); }
+
   /* Mini progress badge in section header */
   .section h2 .progress-mini {
     font-size: 11px;
@@ -435,7 +468,7 @@
       <div class="brand">
         <div class="logo">DE</div>
         <div>
-          <h1>Data Engineer · Study Library</h1>
+          <h1>Data Engineer  -  Study Library</h1>
           <p>One place to access every PDF, script, and note in your collection</p>
         </div>
       </div>
@@ -460,7 +493,7 @@
         <div class="label">Completed</div>
         <div class="value" id="statDone">--</div>
         <div class="progress-bar"><div class="fill" id="statDoneFill" style="width:0%"></div></div>
-        <div class="sub-label" id="statDoneSub">0% read · 0 in progress</div>
+        <div class="sub-label" id="statDoneSub">0% read  -  0 in progress</div>
       </div>
       <div class="stat"><div class="label">PDFs</div><div class="value" id="statPdf">--</div></div>
     </div>
@@ -469,7 +502,7 @@
     <div class="note">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       <div>
-        Click any card to open the file. Click the small circle in the top-right corner of a card to cycle its status: <code>Unread ? In progress ? Done</code>. Your progress is saved automatically in this browser.
+        Click any card to open the file. Use the small circle (top-right) to cycle status: <code>Unread ? In progress ? Done</code>. Your progress is saved in this browser. Filter by <strong>Topic</strong> (real content) or <strong>Folder</strong> (file location). Watch for <code>MISFILED</code>, <code>MISNAMED</code>, <code>DUPLICATE</code>, <code>IMAGE-ONLY</code> badges  -  they flag files whose name doesn't match the real content.
       </div>
     </div>
 
@@ -479,6 +512,9 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input id="searchInput" type="text" placeholder="Search files by name, folder, or extension..." />
       </div>
+      <select id="topicSelect" class="sort" title="Filter by content topic">
+        <option value="all">Topic: All</option>
+      </select>
       <select id="statusSelect" class="sort" title="Filter by reading status">
         <option value="all">Status: All</option>
         <option value="unread">Status: Unread</option>
@@ -501,7 +537,7 @@
     <div id="results"></div>
 
     <footer>
-      Generated index for your local study library · works offline · no tracking
+      Generated index for your local study library  -  works offline  -  no tracking
     </footer>
   </div>
 
@@ -572,72 +608,140 @@
     { category: "Text Notes",     path: "Text/ETL_TEXT.pdf", size: 1026901 },
 
     // Tools/ADB (Azure Databricks)
-    { category: "Tools · ADB",    path: "Tools/ADB/ADB_1.pdf",             size: 206320 },
-    { category: "Tools · ADB",    path: "Tools/ADB/ADB_2.pdf",             size: 13105963 },
-    { category: "Tools · ADB",    path: "Tools/ADB/Exam.pdf",              size: 202505 },
-    { category: "Tools · ADB",    path: "Tools/ADB/interviewquestions.pdf",size: 2284905 },
+    { category: "Tools  -  ADB",    path: "Tools/ADB/ADB_1.pdf",             size: 206320 },
+    { category: "Tools  -  ADB",    path: "Tools/ADB/ADB_2.pdf",             size: 13105963 },
+    { category: "Tools  -  ADB",    path: "Tools/ADB/Exam.pdf",              size: 202505 },
+    { category: "Tools  -  ADB",    path: "Tools/ADB/interviewquestions.pdf",size: 2284905 },
 
     // Tools/ADF (Azure Data Factory)
-    { category: "Tools · ADF",    path: "Tools/ADF/1.pdf",   size: 3269469 },
-    { category: "Tools · ADF",    path: "Tools/ADF/2.pdf",   size: 3133596 },
-    { category: "Tools · ADF",    path: "Tools/ADF/ADF.txt", size: 52 },
+    { category: "Tools  -  ADF",    path: "Tools/ADF/1.pdf",   size: 3269469 },
+    { category: "Tools  -  ADF",    path: "Tools/ADF/2.pdf",   size: 3133596 },
+    { category: "Tools  -  ADF",    path: "Tools/ADF/ADF.txt", size: 52 },
   ];
 
-  // ---------- Friendly display names ----------
+  // ---------- Content topics (real subject matter) ----------
+  const TOPIC_MAP = {
+    "Interview/INTERVIEW_QUESTIONS.pdf":   "Azure DE Interview",
+    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Azure DE Interview",
+    "Interview/Top 52 Azure Data Engineering Questions & Answers guide.pdf": "Azure DE Interview",
+    "others/DC.pdf":                       "Data Cleaning",
+    "others/DC_1.pdf":                     "Data Cleaning",
+    "others/DET.pdf":                      "DE Concepts",
+    "others/DM.pdf":                       "Data Modeling",
+    "others/DM_1.pdf":                     "Data Modeling",
+    "Project/1742186639894.pdf":           "Project Ideas",
+    "Python/1703635703555.pdf":            "Python Practice",
+    "Python/1743143545317.pdf":            "Python Interview",
+    "Python/interview_practice.py":        "Python Practice",
+    "Python/test.json":                    "Python Practice",
+    "Spark/1744697184048.pdf":             "File Types",
+    "Spark/1744854540663.pdf":             "PySpark Intro",
+    "Spark/Apachesparkbeg.pdf":            "PySpark Intro",
+    "Spark/DAG.pdf":                       "PySpark Intro",
+    "Spark/Data Engineer .pdf":            "PySpark Scenarios",
+    "Spark/interview_question.pdf":        "Spark Interview Q&A",
+    "Spark/interview_question_1.pdf":      "Spark Interview Q&A",
+    "Spark/interview_question_2.pdf":      "PySpark Scenarios",
+    "Spark/INTRO.pdf":                     "PySpark Intro",
+    "Spark/L1.pdf":                        "PySpark Functions",
+    "Spark/pyspark122page.pdf":            "PySpark Intro",
+    "Spark/pysparkfunctions.pdf":          "PySpark Functions",
+    "Spark/pysparktrciks.pdf":             "PySpark Tips",
+    "Spark/pyspark_1.pdf":                 "PySpark Intro",
+    "Spark/Senario_based.pdf":             "PySpark Scenarios",
+    "Spark/Senario_based_tcs.pdf":         "PySpark Scenarios",
+    "Spark/SQLVSSPARK.pdf":                "SQL vs PySpark",
+    "Spark/SQLVSSPARK_1.pdf":              "SQL vs PySpark",
+    "sql/CTE_VS_Sub_query.pdf":            "SQL Advanced",
+    "sql/INTERVIEW_QUESTIONS.pdf":         "SQL Practice",
+    "sql/INTRO_1.pdf":                     "SQL Intro",
+    "sql/INTRO_2.pdf":                     "SQL Window Functions",
+    "sql/INTRO_3.pdf":                     "SQL Intro",
+    "sql/INTRO_4.pdf":                     "SQL Intro",
+    "sql/QUESTIONS.pdf":                   "SQL Practice",
+    "sql/QUESTIONS_1.pdf":                 "SQL Practice",
+    "sql/sql_optimization.pdf":            "SQL Advanced",
+    "sql/SSP.pdf":                         "SQL Advanced",
+    "sql/WFSQL.pdf":                       "SQL Window Functions",
+    "Text/BD_TEXT.pdf":                    "eBook / Long-form",
+    "Text/DE_TEXT.pdf":                    "eBook / Long-form",
+    "Text/ETL_TEXT.pdf":                   "eBook / Long-form",
+    "Tools/ADB/ADB_1.pdf":                 "Azure Databricks",
+    "Tools/ADB/ADB_2.pdf":                 "Azure Databricks",
+    "Tools/ADB/Exam.pdf":                  "Azure Databricks",
+    "Tools/ADB/interviewquestions.pdf":    "Azure Databricks",
+    "Tools/ADF/1.pdf":                     "Azure Data Factory",
+    "Tools/ADF/2.pdf":                     "Azure Data Factory",
+    "Tools/ADF/ADF.txt":                   "Azure Data Factory",
+  };
+
+  // ---------- Flags (warnings about misnamed / misfiled / duplicate files) ----------
+  const FILE_FLAGS = {
+    "Spark/1744697184048.pdf":     ["misfiled"],
+    "Spark/DAG.pdf":               ["image-only"],
+    "Spark/Data Engineer .pdf":    ["misnamed"],
+    "Spark/L1.pdf":                ["misnamed"],
+    "Spark/Senario_based.pdf":     ["duplicate"],
+    "Spark/Senario_based_tcs.pdf": ["misnamed"],
+    "Tools/ADB/ADB_2.pdf":         ["narrow"],
+    "sql/INTRO_2.pdf":             ["misnamed"],
+  };
+
+  // ---------- Friendly display names (content-based) ----------
   const FRIENDLY_NAMES = {
-    "Interview/INTERVIEW_QUESTIONS.pdf":   "Data Engineering · Interview Questions",
-    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Data Engineering · Interview Questions (Set 2)",
+    "Interview/INTERVIEW_QUESTIONS.pdf":   "Azure DE Interview Q&A - Topicwise (57 pg)",
+    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Azure DE Interview Q&A - Companywise (14 companies, 68 pg)",
     "Interview/Top 52 Azure Data Engineering Questions & Answers guide.pdf":
-                                           "Top 52 Azure Data Engineering Q&A Guide",
-    "others/DC.pdf":  "Data Concepts · Notes",
-    "others/DC_1.pdf":"Data Concepts · Notes (Set 2)",
-    "others/DET.pdf": "Data Engineering Toolkit / DET",
-    "others/DM.pdf":  "Data Modeling · Notes",
-    "others/DM_1.pdf":"Data Modeling · Notes (Set 2)",
-    "Project/1742186639894.pdf": "Project Reference Doc",
-    "Python/1703635703555.pdf":  "Python · Reference PDF (1)",
-    "Python/1743143545317.pdf":  "Python · Reference PDF (2)",
-    "Python/interview_practice.py": "Python · interview_practice.py",
-    "Python/test.json":             "Python · test.json (sample data)",
-    "Spark/1744697184048.pdf": "Spark · Reference PDF (A)",
-    "Spark/1744854540663.pdf": "Spark · Reference PDF (B)",
-    "Spark/Apachesparkbeg.pdf": "Apache Spark · Beginner Guide",
-    "Spark/DAG.pdf": "Spark · DAG (Execution Plan)",
-    "Spark/Data Engineer .pdf": "Spark · Data Engineer Notes",
-    "Spark/interview_question.pdf":   "Spark · Interview Questions",
-    "Spark/interview_question_1.pdf": "Spark · Interview Questions (Set 2)",
-    "Spark/interview_question_2.pdf": "Spark · Interview Questions (Set 3)",
-    "Spark/INTRO.pdf": "Spark · Introduction",
-    "Spark/L1.pdf":    "Spark · Lesson 1",
-    "Spark/pyspark122page.pdf":   "PySpark · 122-page Guide",
-    "Spark/pysparkfunctions.pdf": "PySpark · Functions Reference",
-    "Spark/pysparktrciks.pdf":    "PySpark · Tricks & Tips",
-    "Spark/pyspark_1.pdf":        "PySpark · Notes (1)",
-    "Spark/Senario_based.pdf":    "Spark · Scenario-Based Questions",
-    "Spark/Senario_based_tcs.pdf":"Spark · Scenario Questions (TCS)",
-    "Spark/SQLVSSPARK.pdf":       "SQL vs Spark · Comparison",
-    "Spark/SQLVSSPARK_1.pdf":     "SQL vs Spark · Comparison (Set 2)",
-    "sql/CTE_VS_Sub_query.pdf":    "SQL · CTE vs Subquery",
-    "sql/INTERVIEW_QUESTIONS.pdf": "SQL · Interview Questions",
-    "sql/INTRO_1.pdf":             "SQL · Introduction (1)",
-    "sql/INTRO_2.pdf":             "SQL · Introduction (2)",
-    "sql/INTRO_3.pdf":             "SQL · Introduction (3)",
-    "sql/INTRO_4.pdf":             "SQL · Introduction (4)",
-    "sql/QUESTIONS.pdf":           "SQL · Practice Questions",
-    "sql/QUESTIONS_1.pdf":         "SQL · Practice Questions (Set 2)",
-    "sql/sql_optimization.pdf":    "SQL · Optimization",
-    "sql/SSP.pdf":                 "SQL · Stored Procedures (SSP)",
-    "sql/WFSQL.pdf":               "SQL · Window Functions",
-    "Text/BD_TEXT.pdf":  "Big Data · Text Notes",
-    "Text/DE_TEXT.pdf":  "Data Engineering · Text Notes",
-    "Text/ETL_TEXT.pdf": "ETL · Text Notes",
-    "Tools/ADB/ADB_1.pdf":             "Azure Databricks · Notes (1)",
-    "Tools/ADB/ADB_2.pdf":             "Azure Databricks · Notes (2)",
-    "Tools/ADB/Exam.pdf":              "Azure Databricks · Exam Prep",
-    "Tools/ADB/interviewquestions.pdf":"Azure Databricks · Interview Questions",
-    "Tools/ADF/1.pdf":   "Azure Data Factory · Notes (1)",
-    "Tools/ADF/2.pdf":   "Azure Data Factory · Notes (2)",
-    "Tools/ADF/ADF.txt": "ADF · Reference Link",
+                                           "Top 52 Azure DE Q&A Guide (14 pg)",
+    "others/DC.pdf":                "Data Cleaning with SQL - COALESCE / IFNULL / ISNULL (21 pg)",
+    "others/DC_1.pdf":              "Data Cleaning - Brief Guide (Artists of DS, 15 pg)",
+    "others/DET.pdf":               "Data Engineering Terms - Glossary (12 pg)",
+    "others/DM.pdf":                "Data Modeling - Concepts & Types (Raushan Kumar, 8 pg)",
+    "others/DM_1.pdf":              "Data Modeling - Visual Foundation (codebasics, 13 pg)",
+    "Project/1742186639894.pdf":    "10 FREE Data Analytics Project Ideas",
+    "Python/1703635703555.pdf":     "140+ Basic Python Programs (96 pg)",
+    "Python/1743143545317.pdf":     "Most-Asked Python Interview Q&A (26 pg)",
+    "Python/interview_practice.py": "Your Python Practice - primes / palindrome / vowels",
+    "Python/test.json":             "Sample JSON for the practice script",
+    "Spark/1744697184048.pdf":      "Data Engineering File Types Cheat Sheet",
+    "Spark/1744854540663.pdf":      "PySpark Tutorial - Intro & DataFrames (16 pg)",
+    "Spark/Apachesparkbeg.pdf":     "Apache Spark for Beginners (30 pg)",
+    "Spark/DAG.pdf":                "Spark DAG - slides (image-only)",
+    "Spark/Data Engineer .pdf":     "PySpark Scenario Q&A (Nitya CloudTech)",
+    "Spark/interview_question.pdf":   "Top 50 PySpark Interview Q&A - Jay C (57 pg)",
+    "Spark/interview_question_1.pdf": "Top 50+ Apache Spark Interview Q&A (25 pg)",
+    "Spark/interview_question_2.pdf": "DE Interview Scenarios - skew / repartition / AQE",
+    "Spark/INTRO.pdf":              "Day 1 - PySpark & Databricks Architecture (Swapnil Thorat)",
+    "Spark/L1.pdf":                 "Top 100 PySpark Functions Reference (30 pg)",
+    "Spark/pyspark122page.pdf":     "Master Spark - One Post to Rule Them All (112 pg)",
+    "Spark/pysparkfunctions.pdf":   "Top 50 Most-Used PySpark Functions (11 pg)",
+    "Spark/pysparktrciks.pdf":      "12 PySpark Tricks (Karthik Kondpak)",
+    "Spark/pyspark_1.pdf":          "What is PySpark? - Udaya G (31 pg)",
+    "Spark/Senario_based.pdf":      "PySpark Scenario Q&A (duplicate of Data Engineer.pdf)",
+    "Spark/Senario_based_tcs.pdf":  "Real-time Streaming Scenarios (Prominent Academy)",
+    "Spark/SQLVSSPARK.pdf":         "Spark vs SQL Functions Cheat Sheet (11 pg)",
+    "Spark/SQLVSSPARK_1.pdf":       "SQL & PySpark Equivalents - DML (Atharva Jirafe)",
+    "sql/CTE_VS_Sub_query.pdf":     "CTE vs Subqueries (Tushar Wagh)",
+    "sql/INTERVIEW_QUESTIONS.pdf":  "Accenture Data Analyst SQL Questions (1-4 YoE)",
+    "sql/INTRO_1.pdf":              "SQL Interview Q&A - Fundamentals (24 pg)",
+    "sql/INTRO_2.pdf":              "SQL Window Functions Zero-to-Hero - Shailesh (28 pg)",
+    "sql/INTRO_3.pdf":              "SQL Commands Reference - DDL/DML/DCL/TCL (56 pg)",
+    "sql/INTRO_4.pdf":              "Zero to Advance SQL - 30-Day Plan (45 pg)",
+    "sql/QUESTIONS.pdf":            "LeetCode-style Database Problems (105 pg)",
+    "sql/QUESTIONS_1.pdf":          "10 Complex SQL Queries Every Dev Should Master (Learnbay)",
+    "sql/sql_optimization.pdf":     "SQL Query Optimization Techniques",
+    "sql/SSP.pdf":                  "SQL Stored Procedures - Comprehensive Guide (Raghavendra)",
+    "sql/WFSQL.pdf":                "5 Essential SQL Window Functions (Dawn Choo)",
+    "Text/BD_TEXT.pdf":             "Big Book of Data Engineering - 3rd Ed (Databricks, 125 pg)",
+    "Text/DE_TEXT.pdf":             "Delta Lake: Up and Running (O'Reilly, Bennie Haelen)",
+    "Text/ETL_TEXT.pdf":            "Understanding ETL (O'Reilly, Matt Palmer)",
+    "Tools/ADB/ADB_1.pdf":              "Intro to Azure Databricks (Praveen Patel, 8 pg)",
+    "Tools/ADB/ADB_2.pdf":              "Lakehouse Part 9 - Delta Lake Deletion Vectors",
+    "Tools/ADB/Exam.pdf":               "Databricks DE Associate - Practice Exam (45 Q)",
+    "Tools/ADB/interviewquestions.pdf": "Databricks DE Associate Practice Bank (105 pg)",
+    "Tools/ADF/1.pdf":              "ADF Scenario 29 - Bulk Copy: Azure SQL to ADLS",
+    "Tools/ADF/2.pdf":              "ADF Scenario 15 - Copy REST API to Azure Data Lake",
+    "Tools/ADF/ADF.txt":            "ADF - LinkedIn Reference Link",
   };
 
   // ---------- Helpers ----------
@@ -672,6 +776,7 @@
   let searchTerm = "";
   let sortBy = "folder";
   let statusFilter = "all";
+  let topicFilter = "all";
 
   // ---------- Reading progress (localStorage) ----------
   const PROGRESS_KEY = "de-library-progress";
@@ -700,17 +805,19 @@
   };
   const STATUS_LABEL = { unread: "Mark as In progress", progress: "Mark as Done", done: "Mark as Unread" };
 
-  // Decorate files with ext & display name
+  // Decorate files with ext, display name, topic, and flags
   FILES.forEach(f => {
     f.ext = getExt(f.path);
     f.name = fileName(f.path);
     f.display = FRIENDLY_NAMES[f.path] || f.name;
+    f.topic = TOPIC_MAP[f.path] || "Other";
+    f.flags = FILE_FLAGS[f.path] || [];
   });
 
   // ---------- Render ----------
   const categories = Array.from(new Set(FILES.map(f => f.category)));
   const categoryOrder = ["Interview", "SQL", "Spark", "Python",
-                         "Tools · ADB", "Tools · ADF", "Text Notes",
+                         "Tools  -  ADB", "Tools  -  ADF", "Text Notes",
                          "Others", "Project"];
   categories.sort((a, b) => {
     const ai = categoryOrder.indexOf(a); const bi = categoryOrder.indexOf(b);
@@ -732,7 +839,7 @@
     document.getElementById("statPdf").textContent   = pdfs;
     document.getElementById("statDone").textContent  = done + " / " + FILES.length;
     document.getElementById("statDoneFill").style.width = pct + "%";
-    document.getElementById("statDoneSub").textContent  = pct + "% read · " + prog + " in progress";
+    document.getElementById("statDoneSub").textContent  = pct + "% read  -  " + prog + " in progress";
   }
 
   function renderChips() {
@@ -764,13 +871,16 @@
     let list = FILES.filter(f => {
       if (activeCategory !== "All" && f.category !== activeCategory) return false;
       if (statusFilter !== "all" && getStatus(f.path) !== statusFilter) return false;
+      if (topicFilter !== "all" && f.topic !== topicFilter) return false;
       if (!t) return true;
       return (
         f.name.toLowerCase().includes(t) ||
         f.display.toLowerCase().includes(t) ||
         f.category.toLowerCase().includes(t) ||
         f.path.toLowerCase().includes(t) ||
-        f.ext.includes(t)
+        f.ext.includes(t) ||
+        (f.topic || "").toLowerCase().includes(t) ||
+        (f.flags || []).some(fl => fl.toLowerCase().includes(t))
       );
     });
 
@@ -798,6 +908,9 @@
     const url = safeUrl(f.path);
     const label = (f.ext || "file").toUpperCase();
     const status = getStatus(f.path);
+    const flagsHTML = (f.flags || []).map(fl =>
+      `<span class="flag-badge flag-${fl}">${fl.replace(/-/g, ' ')}</span>`
+    ).join("");
     return `
       <a class="card" href="${url}" target="_blank" rel="noopener" data-status="${status}">
         <div class="icon ${ic}">${label}</div>
@@ -809,6 +922,10 @@
             <span>${formatBytes(f.size)}</span>
             <span class="dot"></span>
             <span>${f.name}</span>
+          </div>
+          <div class="tags-row">
+            <span class="topic-tag">${f.topic}</span>
+            ${flagsHTML}
           </div>
         </div>
         <span class="status-btn" data-status="${status}" data-path="${f.path.replace(/"/g, '&quot;')}" title="${STATUS_LABEL[status]}" aria-label="${STATUS_LABEL[status]}">${STATUS_ICON[status]}</span>
@@ -823,7 +940,7 @@
       return;
     }
 
-    if (sortBy === "folder" && activeCategory === "All" && !searchTerm.trim() && statusFilter === "all") {
+    if (sortBy === "folder" && activeCategory === "All" && !searchTerm.trim() && statusFilter === "all" && topicFilter === "all") {
       const byCat = {};
       list.forEach(f => { (byCat[f.category] = byCat[f.category] || []).push(f); });
       wrap.innerHTML = Object.keys(byCat).map(cat => {
@@ -856,6 +973,23 @@
   });
   document.getElementById("statusSelect").addEventListener("change", e => {
     statusFilter = e.target.value;
+    renderResults();
+  });
+
+  // Populate topic dropdown with all unique topics (sorted, with counts)
+  (function populateTopics() {
+    const counts = {};
+    FILES.forEach(f => { counts[f.topic] = (counts[f.topic] || 0) + 1; });
+    const sel = document.getElementById("topicSelect");
+    Object.keys(counts).sort().forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = "Topic: " + t + " (" + counts[t] + ")";
+      sel.appendChild(opt);
+    });
+  })();
+  document.getElementById("topicSelect").addEventListener("change", e => {
+    topicFilter = e.target.value;
     renderResults();
   });
 
