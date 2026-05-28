@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Data Engineer · Study Library</title>
+<title>Data Engineer Â· Study Library</title>
 <style>
   :root {
     --bg-0: #0b1020;
@@ -313,6 +313,80 @@
     font-weight: 500;
   }
 
+  /* Status button (per-card) */
+  .card { padding-right: 54px; }
+  .status-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--bg-1);
+    color: var(--text-mute);
+    transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+    z-index: 3;
+  }
+  .status-btn:hover { transform: scale(1.12); }
+  .status-btn svg { width: 16px; height: 16px; }
+  .status-btn[data-status="progress"] {
+    color: var(--warn);
+    border-color: var(--warn);
+    background: rgba(255, 195, 106, 0.14);
+  }
+  .status-btn[data-status="done"] {
+    color: var(--accent-3);
+    border-color: var(--accent-3);
+    background: rgba(94, 224, 193, 0.18);
+  }
+  .card[data-status="progress"] {
+    border-left: 3px solid var(--warn);
+  }
+  .card[data-status="done"] {
+    opacity: 0.82;
+    border-left: 3px solid var(--accent-3);
+  }
+  .card[data-status="done"]:hover { opacity: 1; }
+
+  /* Stat progress bar (Completed stat) */
+  .stat .progress-bar {
+    margin-top: 10px;
+    height: 5px;
+    background: var(--panel-strong);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .stat .progress-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-3), var(--accent));
+    border-radius: 999px;
+    transition: width .35s ease;
+  }
+  .stat .sub-label {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--text-mute);
+  }
+
+  /* Mini progress badge in section header */
+  .section h2 .progress-mini {
+    font-size: 11px;
+    color: var(--accent-3);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    background: rgba(94, 224, 193, 0.12);
+    border: 1px solid rgba(94, 224, 193, 0.25);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .section h2 .progress-mini.zero {
+    color: var(--text-mute);
+    background: var(--panel-strong);
+    border-color: var(--border);
+  }
+
   .empty {
     text-align: center;
     padding: 60px 20px;
@@ -361,11 +435,15 @@
       <div class="brand">
         <div class="logo">DE</div>
         <div>
-          <h1>Data Engineer · Study Library</h1>
+          <h1>Data Engineer Â· Study Library</h1>
           <p>One place to access every PDF, script, and note in your collection</p>
         </div>
       </div>
       <div class="actions">
+        <button class="btn" id="resetBtn" title="Clear all reading progress">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <span>Reset progress</span>
+        </button>
         <button class="btn" id="themeBtn" title="Toggle theme">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
           <span id="themeLabel">Light mode</span>
@@ -375,17 +453,23 @@
 
     <!-- Stats -->
     <div class="stats">
-      <div class="stat"><div class="label">Total Files</div><div class="value" id="statFiles">—</div></div>
-      <div class="stat"><div class="label">Total Size</div><div class="value" id="statSize">—</div></div>
-      <div class="stat"><div class="label">Categories</div><div class="value" id="statCats">—</div></div>
-      <div class="stat"><div class="label">PDFs</div><div class="value" id="statPdf">—</div></div>
+      <div class="stat"><div class="label">Total Files</div><div class="value" id="statFiles">--</div></div>
+      <div class="stat"><div class="label">Total Size</div><div class="value" id="statSize">--</div></div>
+      <div class="stat"><div class="label">Categories</div><div class="value" id="statCats">--</div></div>
+      <div class="stat">
+        <div class="label">Completed</div>
+        <div class="value" id="statDone">--</div>
+        <div class="progress-bar"><div class="fill" id="statDoneFill" style="width:0%"></div></div>
+        <div class="sub-label" id="statDoneSub">0% read Â· 0 in progress</div>
+      </div>
+      <div class="stat"><div class="label">PDFs</div><div class="value" id="statPdf">--</div></div>
     </div>
 
     <!-- Note -->
     <div class="note">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
       <div>
-        Place this <code>index.html</code> at the root of <code>Data_Engineer/</code> and just double-click it. Each card opens the file in a new tab using your default app. Use the search bar or category chips to filter.
+        Click any card to open the file. Click the small circle in the top-right corner of a card to cycle its status: <code>Unread ? In progress ? Done</code>. Your progress is saved automatically in this browser.
       </div>
     </div>
 
@@ -393,12 +477,18 @@
     <div class="controls">
       <div class="search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input id="searchInput" type="text" placeholder="Search files by name, folder, or extension…" />
+        <input id="searchInput" type="text" placeholder="Search files by name, folder, or extension..." />
       </div>
+      <select id="statusSelect" class="sort" title="Filter by reading status">
+        <option value="all">Status: All</option>
+        <option value="unread">Status: Unread</option>
+        <option value="progress">Status: In progress</option>
+        <option value="done">Status: Done</option>
+      </select>
       <select id="sortSelect" class="sort">
         <option value="folder">Sort: Folder</option>
-        <option value="name">Sort: Name (A–Z)</option>
-        <option value="name-desc">Sort: Name (Z–A)</option>
+        <option value="name">Sort: Name (A-Z)</option>
+        <option value="name-desc">Sort: Name (Z-A)</option>
         <option value="size-desc">Sort: Size (large ? small)</option>
         <option value="size">Sort: Size (small ? large)</option>
       </select>
@@ -411,7 +501,7 @@
     <div id="results"></div>
 
     <footer>
-      Generated index for your local study library · works offline · no tracking
+      Generated index for your local study library Â· works offline Â· no tracking
     </footer>
   </div>
 
@@ -482,72 +572,72 @@
     { category: "Text Notes",     path: "Text/ETL_TEXT.pdf", size: 1026901 },
 
     // Tools/ADB (Azure Databricks)
-    { category: "Tools · ADB",    path: "Tools/ADB/ADB_1.pdf",             size: 206320 },
-    { category: "Tools · ADB",    path: "Tools/ADB/ADB_2.pdf",             size: 13105963 },
-    { category: "Tools · ADB",    path: "Tools/ADB/Exam.pdf",              size: 202505 },
-    { category: "Tools · ADB",    path: "Tools/ADB/interviewquestions.pdf",size: 2284905 },
+    { category: "Tools Â· ADB",    path: "Tools/ADB/ADB_1.pdf",             size: 206320 },
+    { category: "Tools Â· ADB",    path: "Tools/ADB/ADB_2.pdf",             size: 13105963 },
+    { category: "Tools Â· ADB",    path: "Tools/ADB/Exam.pdf",              size: 202505 },
+    { category: "Tools Â· ADB",    path: "Tools/ADB/interviewquestions.pdf",size: 2284905 },
 
     // Tools/ADF (Azure Data Factory)
-    { category: "Tools · ADF",    path: "Tools/ADF/1.pdf",   size: 3269469 },
-    { category: "Tools · ADF",    path: "Tools/ADF/2.pdf",   size: 3133596 },
-    { category: "Tools · ADF",    path: "Tools/ADF/ADF.txt", size: 52 },
+    { category: "Tools Â· ADF",    path: "Tools/ADF/1.pdf",   size: 3269469 },
+    { category: "Tools Â· ADF",    path: "Tools/ADF/2.pdf",   size: 3133596 },
+    { category: "Tools Â· ADF",    path: "Tools/ADF/ADF.txt", size: 52 },
   ];
 
   // ---------- Friendly display names ----------
   const FRIENDLY_NAMES = {
-    "Interview/INTERVIEW_QUESTIONS.pdf":   "Data Engineering — Interview Questions",
-    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Data Engineering — Interview Questions (Set 2)",
+    "Interview/INTERVIEW_QUESTIONS.pdf":   "Data Engineering Â· Interview Questions",
+    "Interview/INTERVIEW_QUESTIONS_1.pdf": "Data Engineering Â· Interview Questions (Set 2)",
     "Interview/Top 52 Azure Data Engineering Questions & Answers guide.pdf":
                                            "Top 52 Azure Data Engineering Q&A Guide",
-    "others/DC.pdf":  "Data Concepts — Notes",
-    "others/DC_1.pdf":"Data Concepts — Notes (Set 2)",
+    "others/DC.pdf":  "Data Concepts Â· Notes",
+    "others/DC_1.pdf":"Data Concepts Â· Notes (Set 2)",
     "others/DET.pdf": "Data Engineering Toolkit / DET",
-    "others/DM.pdf":  "Data Modeling — Notes",
-    "others/DM_1.pdf":"Data Modeling — Notes (Set 2)",
+    "others/DM.pdf":  "Data Modeling Â· Notes",
+    "others/DM_1.pdf":"Data Modeling Â· Notes (Set 2)",
     "Project/1742186639894.pdf": "Project Reference Doc",
-    "Python/1703635703555.pdf":  "Python — Reference PDF (1)",
-    "Python/1743143545317.pdf":  "Python — Reference PDF (2)",
-    "Python/interview_practice.py": "Python — interview_practice.py",
-    "Python/test.json":             "Python — test.json (sample data)",
-    "Spark/1744697184048.pdf": "Spark — Reference PDF (A)",
-    "Spark/1744854540663.pdf": "Spark — Reference PDF (B)",
-    "Spark/Apachesparkbeg.pdf": "Apache Spark — Beginner Guide",
-    "Spark/DAG.pdf": "Spark — DAG (Execution Plan)",
-    "Spark/Data Engineer .pdf": "Spark — Data Engineer Notes",
-    "Spark/interview_question.pdf":   "Spark — Interview Questions",
-    "Spark/interview_question_1.pdf": "Spark — Interview Questions (Set 2)",
-    "Spark/interview_question_2.pdf": "Spark — Interview Questions (Set 3)",
-    "Spark/INTRO.pdf": "Spark — Introduction",
-    "Spark/L1.pdf":    "Spark — Lesson 1",
-    "Spark/pyspark122page.pdf":   "PySpark — 122-page Guide",
-    "Spark/pysparkfunctions.pdf": "PySpark — Functions Reference",
-    "Spark/pysparktrciks.pdf":    "PySpark — Tricks & Tips",
-    "Spark/pyspark_1.pdf":        "PySpark — Notes (1)",
-    "Spark/Senario_based.pdf":    "Spark — Scenario-Based Questions",
-    "Spark/Senario_based_tcs.pdf":"Spark — Scenario Questions (TCS)",
-    "Spark/SQLVSSPARK.pdf":       "SQL vs Spark — Comparison",
-    "Spark/SQLVSSPARK_1.pdf":     "SQL vs Spark — Comparison (Set 2)",
-    "sql/CTE_VS_Sub_query.pdf":    "SQL — CTE vs Subquery",
-    "sql/INTERVIEW_QUESTIONS.pdf": "SQL — Interview Questions",
-    "sql/INTRO_1.pdf":             "SQL — Introduction (1)",
-    "sql/INTRO_2.pdf":             "SQL — Introduction (2)",
-    "sql/INTRO_3.pdf":             "SQL — Introduction (3)",
-    "sql/INTRO_4.pdf":             "SQL — Introduction (4)",
-    "sql/QUESTIONS.pdf":           "SQL — Practice Questions",
-    "sql/QUESTIONS_1.pdf":         "SQL — Practice Questions (Set 2)",
-    "sql/sql_optimization.pdf":    "SQL — Optimization",
-    "sql/SSP.pdf":                 "SQL — Stored Procedures (SSP)",
-    "sql/WFSQL.pdf":               "SQL — Window Functions",
-    "Text/BD_TEXT.pdf":  "Big Data — Text Notes",
-    "Text/DE_TEXT.pdf":  "Data Engineering — Text Notes",
-    "Text/ETL_TEXT.pdf": "ETL — Text Notes",
-    "Tools/ADB/ADB_1.pdf":             "Azure Databricks — Notes (1)",
-    "Tools/ADB/ADB_2.pdf":             "Azure Databricks — Notes (2)",
-    "Tools/ADB/Exam.pdf":              "Azure Databricks — Exam Prep",
-    "Tools/ADB/interviewquestions.pdf":"Azure Databricks — Interview Questions",
-    "Tools/ADF/1.pdf":   "Azure Data Factory — Notes (1)",
-    "Tools/ADF/2.pdf":   "Azure Data Factory — Notes (2)",
-    "Tools/ADF/ADF.txt": "ADF — Reference Link",
+    "Python/1703635703555.pdf":  "Python Â· Reference PDF (1)",
+    "Python/1743143545317.pdf":  "Python Â· Reference PDF (2)",
+    "Python/interview_practice.py": "Python Â· interview_practice.py",
+    "Python/test.json":             "Python Â· test.json (sample data)",
+    "Spark/1744697184048.pdf": "Spark Â· Reference PDF (A)",
+    "Spark/1744854540663.pdf": "Spark Â· Reference PDF (B)",
+    "Spark/Apachesparkbeg.pdf": "Apache Spark Â· Beginner Guide",
+    "Spark/DAG.pdf": "Spark Â· DAG (Execution Plan)",
+    "Spark/Data Engineer .pdf": "Spark Â· Data Engineer Notes",
+    "Spark/interview_question.pdf":   "Spark Â· Interview Questions",
+    "Spark/interview_question_1.pdf": "Spark Â· Interview Questions (Set 2)",
+    "Spark/interview_question_2.pdf": "Spark Â· Interview Questions (Set 3)",
+    "Spark/INTRO.pdf": "Spark Â· Introduction",
+    "Spark/L1.pdf":    "Spark Â· Lesson 1",
+    "Spark/pyspark122page.pdf":   "PySpark Â· 122-page Guide",
+    "Spark/pysparkfunctions.pdf": "PySpark Â· Functions Reference",
+    "Spark/pysparktrciks.pdf":    "PySpark Â· Tricks & Tips",
+    "Spark/pyspark_1.pdf":        "PySpark Â· Notes (1)",
+    "Spark/Senario_based.pdf":    "Spark Â· Scenario-Based Questions",
+    "Spark/Senario_based_tcs.pdf":"Spark Â· Scenario Questions (TCS)",
+    "Spark/SQLVSSPARK.pdf":       "SQL vs Spark Â· Comparison",
+    "Spark/SQLVSSPARK_1.pdf":     "SQL vs Spark Â· Comparison (Set 2)",
+    "sql/CTE_VS_Sub_query.pdf":    "SQL Â· CTE vs Subquery",
+    "sql/INTERVIEW_QUESTIONS.pdf": "SQL Â· Interview Questions",
+    "sql/INTRO_1.pdf":             "SQL Â· Introduction (1)",
+    "sql/INTRO_2.pdf":             "SQL Â· Introduction (2)",
+    "sql/INTRO_3.pdf":             "SQL Â· Introduction (3)",
+    "sql/INTRO_4.pdf":             "SQL Â· Introduction (4)",
+    "sql/QUESTIONS.pdf":           "SQL Â· Practice Questions",
+    "sql/QUESTIONS_1.pdf":         "SQL Â· Practice Questions (Set 2)",
+    "sql/sql_optimization.pdf":    "SQL Â· Optimization",
+    "sql/SSP.pdf":                 "SQL Â· Stored Procedures (SSP)",
+    "sql/WFSQL.pdf":               "SQL Â· Window Functions",
+    "Text/BD_TEXT.pdf":  "Big Data Â· Text Notes",
+    "Text/DE_TEXT.pdf":  "Data Engineering Â· Text Notes",
+    "Text/ETL_TEXT.pdf": "ETL Â· Text Notes",
+    "Tools/ADB/ADB_1.pdf":             "Azure Databricks Â· Notes (1)",
+    "Tools/ADB/ADB_2.pdf":             "Azure Databricks Â· Notes (2)",
+    "Tools/ADB/Exam.pdf":              "Azure Databricks Â· Exam Prep",
+    "Tools/ADB/interviewquestions.pdf":"Azure Databricks Â· Interview Questions",
+    "Tools/ADF/1.pdf":   "Azure Data Factory Â· Notes (1)",
+    "Tools/ADF/2.pdf":   "Azure Data Factory Â· Notes (2)",
+    "Tools/ADF/ADF.txt": "ADF Â· Reference Link",
   };
 
   // ---------- Helpers ----------
@@ -581,6 +671,34 @@
   let activeCategory = "All";
   let searchTerm = "";
   let sortBy = "folder";
+  let statusFilter = "all";
+
+  // ---------- Reading progress (localStorage) ----------
+  const PROGRESS_KEY = "de-library-progress";
+  let progressMap = {};
+  try { progressMap = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}") || {}; }
+  catch (e) { progressMap = {}; }
+
+  function getStatus(path) { return progressMap[path] || "unread"; }
+  function saveProgress() {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(progressMap));
+  }
+  const STATUS_CYCLE = { "unread": "progress", "progress": "done", "done": "unread" };
+  function cycleStatus(path) {
+    const next = STATUS_CYCLE[getStatus(path)];
+    if (next === "unread") delete progressMap[path];
+    else progressMap[path] = next;
+    saveProgress();
+    return next;
+  }
+
+  // SVG icons for status states
+  const STATUS_ICON = {
+    unread:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>',
+    progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg>',
+    done:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>'
+  };
+  const STATUS_LABEL = { unread: "Mark as In progress", progress: "Mark as Done", done: "Mark as Unread" };
 
   // Decorate files with ext & display name
   FILES.forEach(f => {
@@ -592,7 +710,7 @@
   // ---------- Render ----------
   const categories = Array.from(new Set(FILES.map(f => f.category)));
   const categoryOrder = ["Interview", "SQL", "Spark", "Python",
-                         "Tools · ADB", "Tools · ADF", "Text Notes",
+                         "Tools Â· ADB", "Tools Â· ADF", "Text Notes",
                          "Others", "Project"];
   categories.sort((a, b) => {
     const ai = categoryOrder.indexOf(a); const bi = categoryOrder.indexOf(b);
@@ -605,10 +723,16 @@
   function renderStats() {
     const totalSize = FILES.reduce((s, f) => s + f.size, 0);
     const pdfs = FILES.filter(f => f.ext === "pdf").length;
+    const done = FILES.filter(f => getStatus(f.path) === "done").length;
+    const prog = FILES.filter(f => getStatus(f.path) === "progress").length;
+    const pct  = FILES.length ? Math.round((done / FILES.length) * 100) : 0;
     document.getElementById("statFiles").textContent = FILES.length;
     document.getElementById("statSize").textContent  = formatBytes(totalSize);
     document.getElementById("statCats").textContent  = categories.length;
     document.getElementById("statPdf").textContent   = pdfs;
+    document.getElementById("statDone").textContent  = done + " / " + FILES.length;
+    document.getElementById("statDoneFill").style.width = pct + "%";
+    document.getElementById("statDoneSub").textContent  = pct + "% read Â· " + prog + " in progress";
   }
 
   function renderChips() {
@@ -639,6 +763,7 @@
     const t = searchTerm.trim().toLowerCase();
     let list = FILES.filter(f => {
       if (activeCategory !== "All" && f.category !== activeCategory) return false;
+      if (statusFilter !== "all" && getStatus(f.path) !== statusFilter) return false;
       if (!t) return true;
       return (
         f.name.toLowerCase().includes(t) ||
@@ -672,8 +797,9 @@
     const ic = iconClass(f.ext);
     const url = safeUrl(f.path);
     const label = (f.ext || "file").toUpperCase();
+    const status = getStatus(f.path);
     return `
-      <a class="card" href="${url}" target="_blank" rel="noopener">
+      <a class="card" href="${url}" target="_blank" rel="noopener" data-status="${status}">
         <div class="icon ${ic}">${label}</div>
         <div class="meta">
           <div class="name">${f.display}</div>
@@ -685,6 +811,7 @@
             <span>${f.name}</span>
           </div>
         </div>
+        <span class="status-btn" data-status="${status}" data-path="${f.path.replace(/"/g, '&quot;')}" title="${STATUS_LABEL[status]}" aria-label="${STATUS_LABEL[status]}">${STATUS_ICON[status]}</span>
       </a>`;
   }
 
@@ -696,17 +823,23 @@
       return;
     }
 
-    if (sortBy === "folder" && activeCategory === "All" && !searchTerm.trim()) {
+    if (sortBy === "folder" && activeCategory === "All" && !searchTerm.trim() && statusFilter === "all") {
       const byCat = {};
       list.forEach(f => { (byCat[f.category] = byCat[f.category] || []).push(f); });
-      wrap.innerHTML = Object.keys(byCat).map(cat => `
+      wrap.innerHTML = Object.keys(byCat).map(cat => {
+        const items = byCat[cat];
+        const done = items.filter(f => getStatus(f.path) === "done").length;
+        const miniCls = done === 0 ? "progress-mini zero" : "progress-mini";
+        return `
         <div class="section">
-          <h2>${cat} <span class="count">(${byCat[cat].length})</span><span class="bar"></span></h2>
+          <h2>${cat} <span class="count">(${items.length})</span>
+              <span class="${miniCls}">${done} / ${items.length} done</span>
+              <span class="bar"></span></h2>
           <div class="grid">
-            ${byCat[cat].map(cardHTML).join("")}
+            ${items.map(cardHTML).join("")}
           </div>
-        </div>
-      `).join("");
+        </div>`;
+      }).join("");
     } else {
       wrap.innerHTML = `<div class="grid">${list.map(cardHTML).join("")}</div>`;
     }
@@ -720,6 +853,36 @@
   document.getElementById("sortSelect").addEventListener("change", e => {
     sortBy = e.target.value;
     renderResults();
+  });
+  document.getElementById("statusSelect").addEventListener("change", e => {
+    statusFilter = e.target.value;
+    renderResults();
+  });
+
+  // Click on a card's status circle: cycle status, do NOT open the file
+  document.getElementById("results").addEventListener("click", e => {
+    const btn = e.target.closest(".status-btn");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    cycleStatus(btn.dataset.path);
+    renderStats();
+    renderResults();
+  });
+
+  // Reset progress button
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    const doneCount = Object.keys(progressMap).length;
+    if (doneCount === 0) {
+      alert("No reading progress to reset yet.");
+      return;
+    }
+    if (confirm("Reset reading progress for all " + doneCount + " tracked files?")) {
+      progressMap = {};
+      saveProgress();
+      renderStats();
+      renderResults();
+    }
   });
 
   const themeBtn = document.getElementById("themeBtn");
